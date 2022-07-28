@@ -401,6 +401,7 @@ def main(args,tag:str):
 
     output_dir = Path(args.output_dir)
     if args.resume:
+        print(f"resuming from {args.resume}...")
         if args.resume.startswith('https'):
             checkpoint = torch.hub.load_state_dict_from_url(
                 args.resume, map_location='cpu', check_hash=True)
