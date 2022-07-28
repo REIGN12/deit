@@ -484,7 +484,7 @@ if __name__ == '__main__':
                 f"{args.model}",
                 f"batch{args.batch_size}",
                 f"ep{args.epochs}",
-                f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}",
+                f"{datetime.datetime().now().strftime('%Y-%m-%d-%H-%M-%S')}",
             ]
     tag = "_".join(tag_l)
     if args.output_dir:
