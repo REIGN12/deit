@@ -6,6 +6,10 @@ import numpy as np
 import time
 import torch
 import torch.backends.cudnn as cudnn
+
+import torch.distributed as dist
+import wandb
+
 import json
 
 from pathlib import Path
@@ -477,4 +481,31 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.output_dir:
         Path(args.output_dir).mkdir(parents=True, exist_ok=True)
+    
+
+    # adding wandb support
+    if dist.get_rank() == 0:
+        tag_l = [
+                f"{args.model}",
+                f"batch{args.batch_size}",
+                f"ep{args.epochs}",
+                f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}",
+            ]
+        tag = "_".join(tag_l)
+
+        wandb.login(key='a8c307987b041c73da9445e846682482ef2f526a')
+        run = wandb.init(
+            id=tag,
+            name=tag,
+            entity='reign',
+            project='deeper_deit',
+            job_type='pretrain',
+            config={},
+        )
+        wandb.config.update(args)
+        
+
+
+    
+
     main(args)
