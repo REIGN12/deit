@@ -438,7 +438,7 @@ def main(args,tag:str):
 
         lr_scheduler.step(epoch)
         if args.output_dir:
-            checkpoint_paths = [output_dir / 'checkpoint.pth']
+            checkpoint_paths = [output_dir / f'checkpoint_{epoch}.pth']
             for checkpoint_path in checkpoint_paths:
                 utils.save_on_master({
                     'model': model_without_ddp.state_dict(),
@@ -476,6 +476,12 @@ def main(args,tag:str):
                      'epoch': epoch,
                      'n_parameters': n_parameters}
         
+        # adding wandb log
+        if utils.get_rank() == 0:
+            wandb.log(
+                data=log_stats,
+                step=epoch
+            )
         
         
         
