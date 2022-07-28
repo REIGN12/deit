@@ -183,10 +183,22 @@ def get_args_parser():
     return parser
 
 
-def main(args):
+def main(args,tag:str):
     utils.init_distributed_mode(args)
 
     print(args)
+    # adding wandb support
+    if utils.get_rank() == 0:
+        wandb.login(key='a8c307987b041c73da9445e846682482ef2f526a')
+        run = wandb.init(
+            id=tag,
+            name=tag,
+            entity='reign',
+            project='deeper_deit',
+            job_type='pretrain',
+            config={},
+        )
+        wandb.config.update(args)
 
     if args.distillation_type != 'none' and args.finetune and not args.eval:
         raise NotImplementedError("Finetuning with distillation not yet supported")
@@ -491,22 +503,4 @@ if __name__ == '__main__':
         output_dir = Path(args.output_dir)/tag
         Path(output_dir).mkdir(parents=True, exist_ok=True)
 
-    # adding wandb support
-    if dist.get_rank() == 0:
-
-        wandb.login(key='a8c307987b041c73da9445e846682482ef2f526a')
-        run = wandb.init(
-            id=tag,
-            name=tag,
-            entity='reign',
-            project='deeper_deit',
-            job_type='pretrain',
-            config={},
-        )
-        wandb.config.update(args)
-        
-
-
-    
-
-    main(args)
+    main(args,tag)
