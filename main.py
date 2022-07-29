@@ -1,5 +1,7 @@
 # Copyright (c) 2015-present, Facebook, Inc.
 # All rights reserved.
+import os
+
 import argparse
 import datetime
 import numpy as np
@@ -403,13 +405,27 @@ def main(args):
     )
 
     output_dir = Path(args.output_dir)
-    if args.resume:
-        print(f"resuming from {args.resume}...")
-        if args.resume.startswith('https'):
-            checkpoint = torch.hub.load_state_dict_from_url(
-                args.resume, map_location='cpu', check_hash=True)
-        else:
-            checkpoint = torch.load(args.resume, map_location='cpu')
+
+    auto_resume = None
+    ckps = [ckp for ckp in os.listdir(output_dir) if ckp.endswith('pth') and ckp.startswith('checkpoint')]
+    print(f"All ckps found in {output_dir}:{ckps}")
+    if len(ckps)>0:
+        auto_resume = max([os.path.join(output_dir,ckp) for ckp in ckps], key=os.path.getmtime)
+        print(f"The latest ckp found:{auto_resume}")
+
+    if args.resume or auto_resume:
+        print(f"We are resuming...resume:{args.resume}, auto_resume:{auto_resume}")
+        if auto_resume:
+            print(f"autoresuming from {auto_resume}...")
+            checkpoint = torch.load(auto_resume,map_location='cpu')
+        if args.resume:
+            print(f"resuming from {args.resume}...")
+            if args.resume.startswith('https'):
+                checkpoint = torch.hub.load_state_dict_from_url(
+                    args.resume, map_location='cpu', check_hash=True)
+            else:
+                checkpoint = torch.load(args.resume, map_location='cpu')
+
         model_without_ddp.load_state_dict(checkpoint['model'])
         if not args.eval and 'optimizer' in checkpoint and 'lr_scheduler' in checkpoint and 'epoch' in checkpoint:
             optimizer.load_state_dict(checkpoint['optimizer'])
