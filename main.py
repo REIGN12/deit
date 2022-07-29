@@ -198,7 +198,7 @@ def main(args):
         run = wandb.init(
             id=args.tag,
             name=args.tag,
-            entity='reign',
+            entity='msravcg',
             project='deeper_deit',
             job_type='pretrain',
             config={},
