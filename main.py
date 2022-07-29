@@ -502,12 +502,14 @@ def main(args):
                 data=log_stats,
                 step=epoch
             )
+            print("upload wandb log...")
         
         
         
         if args.output_dir and utils.is_main_process():
             with (output_dir / "log.txt").open("a") as f:
                 f.write(json.dumps(log_stats) + "\n")
+            print('finish local log!!!')
 
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
