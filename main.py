@@ -522,7 +522,7 @@ if __name__ == '__main__':
                 f"{args.model}",
                 f"batch{args.batch_size}",
                 f"ep{args.epochs}",
-                f"num{args.exp_num}"
+                f"{args.exp_num}"
             ]
     tag = "_".join(tag_l)
     args.tag = tag
