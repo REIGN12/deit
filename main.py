@@ -180,6 +180,9 @@ def get_args_parser():
     parser.add_argument('--world_size', default=1, type=int,
                         help='number of distributed processes')
     parser.add_argument('--dist_url', default='env://', help='url used to set up distributed training')
+
+    # exp resume and debug
+    parser.add_argument('--exp-num',default=0,type=int,help='number of exp to distinguish and debug')
     return parser
 
 
@@ -503,7 +506,7 @@ if __name__ == '__main__':
                 f"{args.model}",
                 f"batch{args.batch_size}",
                 f"ep{args.epochs}",
-                f"{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}",
+                f"num{args.exp_num}"
             ]
     tag = "_".join(tag_l)
     if args.output_dir:
