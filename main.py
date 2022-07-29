@@ -184,7 +184,7 @@ def get_args_parser():
     parser.add_argument('--dist_url', default='env://', help='url used to set up distributed training')
 
     # exp resume and debug
-    parser.add_argument('--exp-num',default=0,type=int,help='number of exp to distinguish and debug')
+    parser.add_argument('--exp-num',default="",type=str,help='small str exp to distinguish and debug')
     return parser
 
 
