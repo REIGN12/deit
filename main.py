@@ -186,7 +186,7 @@ def get_args_parser():
     return parser
 
 
-def main(args,tag:str):
+def main(args):
     utils.init_distributed_mode(args)
 
     print(args)
@@ -194,8 +194,8 @@ def main(args,tag:str):
     if utils.get_rank() == 0:
         wandb.login(key='a8c307987b041c73da9445e846682482ef2f526a')
         run = wandb.init(
-            id=tag,
-            name=tag,
+            id=args.tag,
+            name=args.tag,
             entity='reign',
             project='deeper_deit',
             job_type='pretrain',
@@ -509,8 +509,10 @@ if __name__ == '__main__':
                 f"num{args.exp_num}"
             ]
     tag = "_".join(tag_l)
+    args.tag = tag
     if args.output_dir:
-        output_dir = Path(args.output_dir)/tag
-        Path(output_dir).mkdir(parents=True, exist_ok=True)
+        args.output_dir = str(Path(args.output_dir)/tag)
+        print(f"output_dir is {args.output_dir}")
+        Path(args.output_dir).mkdir(parents=True, exist_ok=True)
 
     main(args,tag)
