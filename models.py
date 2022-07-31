@@ -113,6 +113,14 @@ def deit_base_patch16_224_depth15(pretrained=False,**kwargs):
     assert pretrained==False, 'error in pretrained setting!'
     return model
 
+@register_model
+def deit_base_patch16_224_depth16(pretrained=False,**kwargs):
+    model = VisionTransformer(
+        patch_size=16, embed_dim=768, depth=16, num_heads=12, mlp_ratio=4, qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
+    model.default_cfg = _cfg()
+    assert pretrained==False, 'error in pretrained setting!'
+    return model
 
 @register_model
 def deit_tiny_distilled_patch16_224(pretrained=False, **kwargs):
