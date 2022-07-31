@@ -499,12 +499,12 @@ def main(args):
                     }
         
         # adding wandb log
-        if utils.get_rank() == 0:
-            wandb.log(
-                data=log_stats,
-                step=epoch
-            )
-            print("upload wandb log...")
+        # if utils.get_rank() == 0:
+        #     wandb.log(
+        #         data=log_stats,
+        #         step=epoch
+        #     )
+        #     print("upload wandb log...")
         
         
         
